@@ -25,6 +25,8 @@ ACustomSplineController::ACustomSplineController()
 
 			//Setup up some properties
 			TotalPathTimeController = 10.f;
+			SpeedController_01 = 10.f;
+			SpeedController_02 = 5.f;
 			bCanMoveActor = true;
 			StartTime = 0.f;
 
@@ -53,6 +55,15 @@ void ACustomSplineController::BeginPlay()
 			StartTime = GetWorld()->GetTimeSeconds();
 			bCanMoveActor = true;
 
+			//Get Spline Length
+			SplineTotalLength = SplineComponent->GetSplineLength();
+			UE_LOG(LogTemp, Warning, TEXT("Total Spline Length is %f "), SplineTotalLength);
+
+			int32 TotalSplinePoints = SplineComponent->GetNumberOfSplinePoints();
+			UE_LOG(LogTemp, Warning, TEXT("Total Spline Points is %d "), TotalSplinePoints);
+
+			int32 TotalSplineSegments = SplineComponent->GetNumberOfSplineSegments();
+			UE_LOG(LogTemp, Warning, TEXT("Total Spline Segments is %d "), TotalSplineSegments);
 		}
 	}
 	
@@ -68,9 +79,28 @@ void ACustomSplineController::Tick(float DeltaTime)
 	//To Move the Actor along the spline track
 	if (ActorToMove != nullptr && bCanMoveActor)
 	{
-		float CurrentSplineTime = (GetWorld()->GetTimeSeconds() - StartTime) / TotalPathTimeController;
+		float TimeVal1 = (GetWorld()->GetTimeSeconds() - StartTime);
+		UE_LOG(LogTemp, Warning, TEXT("Time Val1 %f"), TimeVal1);
+		CurrentSplineTime = (TimeVal1 / TotalPathTimeController);
+	/*	if (CurrentSplineTime <= 0.5)
+		{
 
-		float Distance = SplineComponent->GetSplineLength() * CurrentSplineTime;
+			CurrentSplineTime = (TimeVal1 / TotalPathTimeController) ;
+		}
+		else
+		{
+			CurrentSplineTime = TimeVal1 / TotalPathTimeController + (TimeVal1 / SpeedController_01);
+		}*/
+		//CurrentSplineTime = (TimeVal1 / TotalPathTimeController) + (TimeVal1 / 5.0f);
+		//UE_LOG(LogTemp, Warning, TEXT("TotalPathTimeController %f"), TotalPathTimeController);
+		UE_LOG(LogTemp, Warning, TEXT("CurrentSplineTime %f"), CurrentSplineTime);
+
+		float Val1 = SplineComponent->GetSplineLength();
+		UE_LOG(LogTemp, Warning, TEXT("Val1 %f"), Val1);
+
+		Distance = Val1 * CurrentSplineTime;
+
+		UE_LOG(LogTemp, Warning, TEXT("Current Distance %f"), Distance);
 
 		FVector Position = SplineComponent->GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
 

@@ -83,6 +83,12 @@ protected:
 		float TotalPathTimeController;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomSplineController")
+		float SpeedController_01;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomSplineController")
+		float SpeedController_02;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomSplineController")
 		bool bSplineInLoop;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomSplineController")
@@ -91,4 +97,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CustomSplineController")
 		float StartTime;
 
+	float CurrentSplineTime=0.f;
+	float Distance = 0.f;
+	float SplineTotalLength = 0.f;
 };
